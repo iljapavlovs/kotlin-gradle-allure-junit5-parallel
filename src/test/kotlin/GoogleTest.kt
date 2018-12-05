@@ -9,13 +9,18 @@ import com.codeborne.selenide.Selenide.getElement
 import com.codeborne.selenide.Selenide.getElements
 import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.Selenide.`$$`
+import com.codeborne.selenide.Selenide.close
 import com.codeborne.selenide.SelenideElement
-import org.junit.Before
-import org.junit.Test
+import com.codeborne.selenide.logevents.LogEventListener
+
 import org.openqa.selenium.By
-import com.codeborne.selenide.Configuration.savePageSource
 import com.codeborne.selenide.logevents.SelenideLogger
 import io.qameta.allure.selenide.AllureSelenide
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 
 
 /*
@@ -26,16 +31,24 @@ import io.qameta.allure.selenide.AllureSelenide
  */
 class GoogleTest {
 
-    @Before fun setUp() {
+    @BeforeEach fun setUp() {
 
 
-//        SelenideLogger.addListener("AllureSelenide", AllureSelenide().screenshots(true).savePageSource(false))
+        SelenideLogger.addListener("AllureSelenide", AllureSelenide().screenshots(true).savePageSource(false))
 
         Configuration.startMaximized = false;
         open("https://google.com/ncr")
     }
 
-    @Test fun usingDollarsWithBackticks() {
+
+    @AfterEach
+    fun tearDown() {
+        SelenideLogger.removeListener<LogEventListener>("AllureSelenide")
+        close()
+    }
+
+    @Test
+    fun usingDollarsWithBackticks() {
         `$`(By.name("q")).setValue("selenide").pressEnter()
         `$$`("#ires .g").shouldHave(sizeGreaterThan(5))
         `$`("#ires .g").shouldHave(text("concise ui tests in Java"));
@@ -47,11 +60,15 @@ class GoogleTest {
         getElement(By.cssSelector("#ires .g")).shouldHave(text("concise ui tests in Java"));
     }
 
-    @Test fun usingAliases() {
+    @Test fun usingAliases_failForScreenshot() {
         get("[name=q]").setValue("selenide").pressEnter()
         all("#ires .g").shouldHave(sizeGreaterThan(5))
-        get("#ires .g").shouldHave(text("concise ui tests in Java"));
+        get("#ires .g").shouldHave(text("text will not match in order to fail this test for screenshot generation"));
+
+        //Selenide will not generate screenshot if using non-Selenide assertions
+        // assertTrue(false) // will not generate screenshot automatically
     }
+
 
     fun get(selector: String) : SelenideElement {
         return `$`(selector);

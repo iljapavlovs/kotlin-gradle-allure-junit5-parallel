@@ -1,2 +1,2 @@
-rootProject.name = 'kotlin-gradle-allure'
+rootProject.name = 'kotlin-gradle-allure-junit5-parallel'
 
