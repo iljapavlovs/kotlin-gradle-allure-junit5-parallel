@@ -3,6 +3,10 @@
 ./gradlew clean test allureReport 
 ```
 
+Running via env type
+```text
+./gradlew clean test -Penv=<dev,acceptance> 
+```
 
 ### Resources 
 * [Allure + Gradle + Selenide + Retrofit2](https://medium.com/@rosolko/simple-allure-2-configuration-for-gradle-8cd3810658dd) 

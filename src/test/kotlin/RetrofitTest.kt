@@ -14,7 +14,7 @@ import retrofit2.Call
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Retrofit tests")
-internal class RetrofitTests {
+internal class RetrofitTest {
     private var service: GitHubService? = null
 
     @BeforeAll

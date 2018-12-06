@@ -112,3 +112,28 @@ test {
 
     forkEvery = 1
 }
+
+if (project.hasProperty('env')) {
+    String environment = project.getProperty('env')
+    def supportedEnvironments = ["acceptance", "dev"]
+    if (!(environment in supportedEnvironments)) {
+        throw new GradleException("You have defined an invalid environment '${environment}' - should be one of ${supportedEnvironments}")
+    }
+    println "Target environment: ${environment}"
+    switch (environment) {
+        case "acceptance":
+            test {
+                include("**/*AcceptanceTest.class")
+            }
+            break
+        default:
+            test {
+                include("**/*Test.class")
+            }
+            break
+    }
+} else {
+    test {
+        include("**/*Test.class")
+    }
+}
