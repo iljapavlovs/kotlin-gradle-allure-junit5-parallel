@@ -25,3 +25,7 @@ test {
     systemProperty 'arg1', System.getProperty('arg1')
 }
 ```
+
+### Allure
+Issues:
+1. https://github.com/allure-framework/allure-java/issues/278
